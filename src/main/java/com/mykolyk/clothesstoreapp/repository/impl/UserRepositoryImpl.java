@@ -1,5 +1,6 @@
 package com.mykolyk.clothesstoreapp.repository.impl;
 
+import com.mykolyk.clothesstoreapp.exception.UserNotFoundException;
 import com.mykolyk.clothesstoreapp.model.User;
 import com.mykolyk.clothesstoreapp.repository.UserRepository;
 import org.springframework.stereotype.Component;
@@ -16,7 +17,7 @@ public class UserRepositoryImpl implements UserRepository {
         return list.stream()
                 .filter(user -> user.getEmail().equals(email))
                 .findFirst()
-                 .orElseThrow(() -> new RuntimeException("User is not found"));
+                 .orElseThrow(UserNotFoundException::new);
     }
 
     @Override
@@ -31,7 +32,7 @@ public class UserRepositoryImpl implements UserRepository {
         if (isDeleted) {
             list.add(user);
         } else {
-            throw new RuntimeException("User is not found");
+            throw new UserNotFoundException();
         }
         return user;
     }
