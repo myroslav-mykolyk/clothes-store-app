@@ -1,9 +1,13 @@
 package com.mykolyk.clothesstoreapp.service.impl;
 
 import com.mykolyk.clothesstoreapp.dto.UserDto;
+import com.mykolyk.clothesstoreapp.exception.UserAlreadyExistsException;
+import com.mykolyk.clothesstoreapp.exception.UserNotFoundException;
 import com.mykolyk.clothesstoreapp.model.User;
 import com.mykolyk.clothesstoreapp.repository.UserRepository;
+import com.mykolyk.clothesstoreapp.service.MappingService;
 import com.mykolyk.clothesstoreapp.service.UserService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -13,55 +17,46 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final MappingService mappingService;
 
     @Override
     public UserDto getUser(String email) {
         log.info("Getting user by email: {}", email);
-        User user = userRepository.getUser(email);
-        return mapUserToUserDto(user);
+        User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+        log.info("Founded user with email: {}", email);
+        return mappingService.mapUserToUserDto(user);
     }
 
     @Override
+    @Transactional
     public UserDto createUser(UserDto userDto) {
         log.info("Creating user with email: {}", userDto.getEmail());
-        User user = mapUserDtoToUser(userDto);
-        user = userRepository.createUser(user);
-        return mapUserToUserDto(user);
+        if (userRepository.existsByEmail(userDto.getEmail())) {
+            throw new UserAlreadyExistsException();
+        }
+        User user = mappingService.mapUserDtoToUser(userDto);
+        user = userRepository.save(user);
+        log.info("Created user with email: {}", user.getEmail());
+        return mappingService.mapUserToUserDto(user);
     }
 
     @Override
+    @Transactional
     public UserDto updateUser(String email, UserDto userDto) {
         log.info("Updating user with email: {}", email);
-        User user = mapUserDtoToUser(userDto);
-
-        User oldUser = userRepository.getUser(email);
-        user.setEmail(oldUser.getEmail());
-        user.setPassword(oldUser.getPassword());
-
-        user = userRepository.updateUser(email, user);
-        return mapUserToUserDto(user);
+        User persistedUser = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+        persistedUser = mappingService.populateUserWithPresentUserDtoFields(persistedUser, userDto);
+        User storedUser = userRepository.save(persistedUser);
+        log.info("Updated user with email: {}", storedUser.getEmail());
+        return mappingService.mapUserToUserDto(persistedUser);
     }
 
     @Override
+    @Transactional
     public void deleteUser(String email) {
         log.info("Deleting user with email: {}", email);
-        userRepository.deleteUser(email);
-    }
-
-    private UserDto mapUserToUserDto(User user) {
-        return UserDto.builder()
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .email(user.getEmail())
-                .build();
-    }
-
-    private User mapUserDtoToUser(UserDto userDto) {
-        return User.builder()
-                .firstName(userDto.getFirstName())
-                .lastName(userDto.getLastName())
-                .email(userDto.getEmail())
-                .password(userDto.getPassword())
-                .build();
+        User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+        userRepository.delete(user);
+        log.info("Used with {} email successfully deleted", email);
     }
 }

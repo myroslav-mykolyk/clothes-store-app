@@ -1,9 +1,9 @@
 package com.mykolyk.clothesstoreapp.controller;
 
 import com.mykolyk.clothesstoreapp.api.UserApi;
-import com.mykolyk.clothesstoreapp.assembler.UserAssembler;
+import com.mykolyk.clothesstoreapp.controller.assembler.UserAssembler;
+import com.mykolyk.clothesstoreapp.controller.model.UserModel;
 import com.mykolyk.clothesstoreapp.dto.UserDto;
-import com.mykolyk.clothesstoreapp.model.UserModel;
 import com.mykolyk.clothesstoreapp.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

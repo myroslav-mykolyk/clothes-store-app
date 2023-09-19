@@ -1,13 +1,14 @@
 package com.mykolyk.clothesstoreapp.repository;
 
 import com.mykolyk.clothesstoreapp.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface UserRepository {
-    User getUser(String email);
+import java.util.Optional;
 
-    User createUser(User user);
+@Repository
+public interface UserRepository extends JpaRepository<User, Long> {
+    Optional<User> findByEmail(String email);
 
-    User updateUser(String email, User user);
-
-    void deleteUser(String email);
+    boolean existsByEmail(String email);
 }

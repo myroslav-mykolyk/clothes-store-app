@@ -1,8 +1,8 @@
-package com.mykolyk.clothesstoreapp.assembler;
+package com.mykolyk.clothesstoreapp.controller.assembler;
 
 import com.mykolyk.clothesstoreapp.controller.UserController;
 import com.mykolyk.clothesstoreapp.dto.UserDto;
-import com.mykolyk.clothesstoreapp.model.UserModel;
+import com.mykolyk.clothesstoreapp.controller.model.UserModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
