@@ -6,15 +6,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-
 @Entity
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "products")
-public class Product {
+@Table(name = "goods")
+public class Good {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,5 +22,7 @@ public class Product {
     @Column(nullable = false, unique = true)
     private String article;
 
-    private BigDecimal price;
+    private Double price;
+
+    private Integer quantity;
 }

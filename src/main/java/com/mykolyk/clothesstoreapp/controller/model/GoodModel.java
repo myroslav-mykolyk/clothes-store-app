@@ -1,7 +1,7 @@
 package com.mykolyk.clothesstoreapp.controller.model;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import com.mykolyk.clothesstoreapp.dto.ProductDto;
+import com.mykolyk.clothesstoreapp.dto.GoodDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -12,7 +12,7 @@ import org.springframework.hateoas.RepresentationModel;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductModel extends RepresentationModel<ProductModel> {
+public class GoodModel extends RepresentationModel<GoodModel> {
     @JsonUnwrapped
-    private ProductDto productDto;
+    private GoodDto goodDto;
 }

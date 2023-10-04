@@ -6,6 +6,7 @@ import com.mykolyk.clothesstoreapp.dto.validation.groups.OnUpdate;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Builder;
 import lombok.Data;
 
@@ -14,7 +15,7 @@ import java.math.BigDecimal;
 @Data
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ProductDto {
+public class GoodDto {
     @NotBlank(message = "'name' field should not be empty", groups = OnCreate.class)
     private String name;
 
@@ -23,5 +24,9 @@ public class ProductDto {
     private String article;
 
     @NotNull(message = "'price' field should not be null", groups = OnCreate.class)
-    private BigDecimal price;
+    private Double price;
+
+    @NotNull(message = "'quantity' field should not be null", groups = OnCreate.class)
+    @PositiveOrZero(message = "'quantity' field should not be negative", groups = OnUpdate.class)
+    private Integer quantity;
 }
