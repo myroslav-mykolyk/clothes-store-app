@@ -57,6 +57,6 @@ public class UserServiceImpl implements UserService {
         log.info("Deleting user with email: {}", email);
         User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
         userRepository.delete(user);
-        log.info("Used with {} email successfully deleted", email);
+        log.info("Deleted user with email: {}", email);
     }
 }

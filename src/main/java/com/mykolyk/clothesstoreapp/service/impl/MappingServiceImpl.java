@@ -11,7 +11,6 @@ import java.util.Objects;
 
 @Service
 public class MappingServiceImpl implements MappingService {
-
     @Override
     public UserDto mapUserToUserDto(User user) {
         return UserDto.builder()

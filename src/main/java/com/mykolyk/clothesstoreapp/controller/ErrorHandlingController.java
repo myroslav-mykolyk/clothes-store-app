@@ -20,18 +20,18 @@ import java.util.stream.Collectors;
 public class ErrorHandlingController {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public List<Error> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
-        log.error("handleMethodArgumentNotValidException: message: {}", exception.getMessage(), exception);
-        return exception.getBindingResult().getAllErrors().stream()
+    public List<Error> handleMethodArgumentNotValidException(MethodArgumentNotValidException methodArgumentNotValidException) {
+        log.error("handleMethodArgumentNotValidException: message: {}", methodArgumentNotValidException.getMessage(), methodArgumentNotValidException);
+        return methodArgumentNotValidException.getBindingResult().getAllErrors().stream()
                 .map(error -> new Error(error.getDefaultMessage(), ErrorType.VALIDATION_ERROR_TYPE, LocalDateTime.now()))
                 .collect(Collectors.toList());
     }
 
     @ExceptionHandler(ServiceException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public Error handleServiceException(ServiceException exception, HandlerMethod handlerMethod) {
-        log.error("handleServiceException: message: {}, method: {}", exception.getMessage(), handlerMethod.getMethod().getName(), exception);
-        return new Error(exception.getMessage(), exception.getErrorType(), LocalDateTime.now());
+    public Error handleServiceException(ServiceException serviceException, HandlerMethod handlerMethod) {
+        log.error("handleServiceException: message: {}, method: {}", serviceException.getMessage(), handlerMethod.getMethod().getName(), serviceException);
+        return new Error(serviceException.getMessage(), serviceException.getErrorType(), LocalDateTime.now());
     }
 
     @ExceptionHandler(Exception.class)
@@ -41,4 +41,3 @@ public class ErrorHandlingController {
         return new Error(exception.getMessage(), ErrorType.FATAL_ERROR_TYPE, LocalDateTime.now());
     }
 }
-
