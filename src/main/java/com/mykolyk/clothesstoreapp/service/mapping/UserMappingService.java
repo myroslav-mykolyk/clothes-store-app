@@ -1,10 +1,9 @@
-package com.mykolyk.clothesstoreapp.service;
+package com.mykolyk.clothesstoreapp.service.mapping;
 
 import com.mykolyk.clothesstoreapp.dto.UserDto;
 import com.mykolyk.clothesstoreapp.model.User;
 
-public interface MappingService {
-
+public interface UserMappingService {
     UserDto mapUserToUserDto(User user);
 
     User mapUserDtoToUser(UserDto userDto);

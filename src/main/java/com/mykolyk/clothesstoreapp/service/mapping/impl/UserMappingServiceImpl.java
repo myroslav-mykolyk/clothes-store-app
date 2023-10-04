@@ -1,16 +1,16 @@
-package com.mykolyk.clothesstoreapp.service.impl;
+package com.mykolyk.clothesstoreapp.service.mapping.impl;
 
 import com.mykolyk.clothesstoreapp.dto.UserDto;
 import com.mykolyk.clothesstoreapp.exception.PasswordsNotValidException;
 import com.mykolyk.clothesstoreapp.model.User;
-import com.mykolyk.clothesstoreapp.service.MappingService;
+import com.mykolyk.clothesstoreapp.service.mapping.UserMappingService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
 @Service
-public class MappingServiceImpl implements MappingService {
+public class UserMappingServiceImpl implements UserMappingService {
     @Override
     public UserDto mapUserToUserDto(User user) {
         return UserDto.builder()

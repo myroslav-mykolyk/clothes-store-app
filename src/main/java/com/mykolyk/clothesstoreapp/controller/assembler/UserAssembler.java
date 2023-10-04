@@ -14,8 +14,8 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class UserAssembler extends RepresentationModelAssemblerSupport<UserDto, UserModel> {
     public static final String GET_REL = "get_user";
     public static final String CREATE_REL = "create_user";
-    public static final String UPDATE_USER = "update_user";
-    public static final String DELETE_USER = "delete_user";
+    public static final String UPDATE_REL = "update_user";
+    public static final String DELETE_REL = "delete_user";
 
     public UserAssembler() {
         super(UserController.class, UserModel.class);
@@ -27,8 +27,8 @@ public class UserAssembler extends RepresentationModelAssemblerSupport<UserDto, 
 
         Link get = linkTo(methodOn(UserController.class).getUser(entity.getEmail())).withRel(GET_REL);
         Link create = linkTo(methodOn(UserController.class).createUser(entity)).withRel(CREATE_REL);
-        Link update = linkTo(methodOn(UserController.class).updateUser(entity.getEmail(), entity)).withRel(UPDATE_USER);
-        Link delete = linkTo(methodOn(UserController.class).deleteUser(entity.getEmail())).withRel(DELETE_USER);
+        Link update = linkTo(methodOn(UserController.class).updateUser(entity.getEmail(), entity)).withRel(UPDATE_REL);
+        Link delete = linkTo(methodOn(UserController.class).deleteUser(entity.getEmail())).withRel(DELETE_REL);
 
         userModel.add(get, create, update, delete);
 

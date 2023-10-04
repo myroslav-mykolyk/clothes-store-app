@@ -5,8 +5,9 @@ import com.mykolyk.clothesstoreapp.exception.UserAlreadyExistsException;
 import com.mykolyk.clothesstoreapp.exception.UserNotFoundException;
 import com.mykolyk.clothesstoreapp.model.User;
 import com.mykolyk.clothesstoreapp.repository.UserRepository;
-import com.mykolyk.clothesstoreapp.service.impl.MappingServiceImpl;
+import com.mykolyk.clothesstoreapp.service.mapping.impl.UserMappingServiceImpl;
 import com.mykolyk.clothesstoreapp.service.impl.UserServiceImpl;
+import com.mykolyk.clothesstoreapp.service.mapping.UserMappingService;
 import com.mykolyk.clothesstoreapp.test.util.TestDataUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,12 +31,11 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
-
     @InjectMocks
     private UserServiceImpl userService;
 
     @Spy
-    private final MappingService mappingService = new MappingServiceImpl();
+    private final UserMappingService userMappingService = new UserMappingServiceImpl();
     @Mock
     private UserRepository userRepository;
 
