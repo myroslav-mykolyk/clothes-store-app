@@ -24,7 +24,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .groupName("api-v1")
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.epam.user.service.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.mykolyk.clothesstoreapp.controller"))
                 .paths(PathSelectors.ant("/api/v1/**"))
                 .build();
     }
