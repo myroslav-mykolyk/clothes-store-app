@@ -3,10 +3,7 @@ package com.mykolyk.clothesstoreapp.service.impl;
 import com.mykolyk.clothesstoreapp.dto.OrderItemDto;
 import com.mykolyk.clothesstoreapp.exception.OrderItemAlreadyExistException;
 import com.mykolyk.clothesstoreapp.exception.OrderItemNotFoundException;
-import com.mykolyk.clothesstoreapp.exception.UserAlreadyExistsException;
-import com.mykolyk.clothesstoreapp.exception.UserNotFoundException;
 import com.mykolyk.clothesstoreapp.model.OrderItem;
-import com.mykolyk.clothesstoreapp.model.User;
 import com.mykolyk.clothesstoreapp.repository.OrderItemRepository;
 import com.mykolyk.clothesstoreapp.service.OrderItemService;
 import com.mykolyk.clothesstoreapp.service.mapping.OrderItemMappingService;
@@ -21,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class OrderItemServiceImpl implements OrderItemService {
     private  final OrderItemRepository orderItemRepository;
     private final OrderItemMappingService orderItemMappingService;
+
     @Override
     public OrderItemDto getOrderItem(Long id) {
         log.info("Getting order item by id: {}", id);
@@ -59,6 +57,6 @@ public class OrderItemServiceImpl implements OrderItemService {
         log.info("Deleting order item with id: {}", id);
         OrderItem orderItem = orderItemRepository.findById(id).orElseThrow(OrderItemNotFoundException::new);
         orderItemRepository.delete(orderItem);
-        log.info("Deleted order item with email: {}", id);
+        log.info("Deleted order item with id: {}", id);
     }
 }
