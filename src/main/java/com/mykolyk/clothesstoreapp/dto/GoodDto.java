@@ -3,10 +3,7 @@ package com.mykolyk.clothesstoreapp.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.mykolyk.clothesstoreapp.dto.validation.groups.OnCreate;
 import com.mykolyk.clothesstoreapp.dto.validation.groups.OnUpdate;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.*;
 import lombok.Builder;
 import lombok.Data;
 
@@ -24,6 +21,7 @@ public class GoodDto {
     private String article;
 
     @NotNull(message = "'price' field should not be null", groups = OnCreate.class)
+    @Positive(message = "'price' field should be positive number", groups = OnUpdate.class)
     private Double price;
 
     @NotNull(message = "'quantity' field should not be null", groups = OnCreate.class)
