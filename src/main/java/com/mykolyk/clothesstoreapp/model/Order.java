@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 
 @Entity
@@ -37,4 +36,6 @@ public class Order {
 
     @Column(name = "modification_time")
     private LocalDateTime modificationTime;
+
+    private boolean isPayed;
 }

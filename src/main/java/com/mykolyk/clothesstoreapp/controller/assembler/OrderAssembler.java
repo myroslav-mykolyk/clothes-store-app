@@ -17,6 +17,7 @@ public class OrderAssembler extends RepresentationModelAssemblerSupport<OrderDto
     public static final String UPDATE_REL = "update_order_";
     public static final String DELETE_REL = "delete_order_";
 
+
     public OrderAssembler() {
         super(OrderController.class, OrderModel.class);
     }

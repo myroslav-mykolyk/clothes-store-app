@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 public class GoodController implements GoodApi {
@@ -19,6 +21,12 @@ public class GoodController implements GoodApi {
     public GoodModel getGood(String article) {
         GoodDto outGoodDto = goodService.getGood(article);
         return goodAssembler.toModel(outGoodDto);
+    }
+
+    @Override
+    public ResponseEntity<List<GoodDto>> getAllGoods() {
+        List<GoodDto> outGoodDtos = goodService.getAllGoods();
+        return ResponseEntity.ok(outGoodDtos);
     }
 
     @Override

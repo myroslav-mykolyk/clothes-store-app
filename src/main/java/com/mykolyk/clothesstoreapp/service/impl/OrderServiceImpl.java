@@ -1,17 +1,26 @@
 package com.mykolyk.clothesstoreapp.service.impl;
 
 import com.mykolyk.clothesstoreapp.dto.OrderDto;
+import com.mykolyk.clothesstoreapp.dto.OrderItemDto;
 import com.mykolyk.clothesstoreapp.exception.OrderAlreadyExistException;
 import com.mykolyk.clothesstoreapp.exception.OrderItemNotFoundException;
 import com.mykolyk.clothesstoreapp.exception.OrderNotFoundException;
 import com.mykolyk.clothesstoreapp.model.Order;
+import com.mykolyk.clothesstoreapp.model.OrderItem;
 import com.mykolyk.clothesstoreapp.repository.OrderRepository;
+import com.mykolyk.clothesstoreapp.service.OrderItemService;
 import com.mykolyk.clothesstoreapp.service.OrderService;
+import com.mykolyk.clothesstoreapp.service.mapping.OrderItemMappingService;
 import com.mykolyk.clothesstoreapp.service.mapping.OrderMappingService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -19,6 +28,8 @@ import org.springframework.stereotype.Service;
 public class OrderServiceImpl implements OrderService {
     private  final OrderRepository orderRepository;
     private final OrderMappingService orderMappingService;
+    private final OrderItemService orderItemService;
+    private final OrderItemMappingService orderItemMappingService;
 
     @Override
     public OrderDto getOrder(Long id) {
@@ -36,6 +47,8 @@ public class OrderServiceImpl implements OrderService {
             throw new OrderAlreadyExistException();
         }
         Order order = orderMappingService.mapOrderDtoToOrder(orderDto);
+        order.setCreationTime(LocalDateTime.now());
+        order.setModificationTime(LocalDateTime.now());
         order = orderRepository.save(order);
         log.info("Created order with id: {}", order.getId());
         return orderMappingService.mapOrderToOrderDto(order);
@@ -47,6 +60,7 @@ public class OrderServiceImpl implements OrderService {
         log.info("Updating order with id: {}", id);
         Order persistedOrder = orderRepository.findById(id).orElseThrow(OrderNotFoundException::new);
         persistedOrder = orderMappingService.populateOrderWithPresentOrderDtoFields(persistedOrder, orderDto);
+        persistedOrder.setModificationTime(LocalDateTime.now());
         Order storedOrder = orderRepository.save(persistedOrder);
         log.info("Updated order with id: {}", storedOrder.getId());
         return orderMappingService.mapOrderToOrderDto(persistedOrder);
@@ -54,10 +68,54 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
+    public OrderDto addOrderItemToOrder(Long id, OrderItemDto orderItemDto) {
+        log.info("Adding orderItem with id: {} to order with id: {}", orderItemDto.getId(), id);
+        Order order = orderRepository.findById(id).orElseThrow(OrderNotFoundException::new);
+        OrderItem orderItem = orderItemMappingService.mapOrderItemDtoToOrderItem(orderItemDto);
+        order.getOrderItems().add(orderItem);
+        order.setModificationTime(LocalDateTime.now());
+        order = orderRepository.save(order);
+        log.info("Added orderItem with id: {} to order with id: {}", orderItemDto.getId(), id);
+        return orderMappingService.mapOrderToOrderDto(order);
+    }
+
+    @Override
+    @Transactional
+    public OrderDto payFoOrder(Long id) {
+        log.info("Paying for order with id: {}", id);
+        Order order = orderRepository.findById(id).orElseThrow(OrderNotFoundException::new);
+        if(order.isPayed()) {
+            //TODO: Add related exception
+            throw new RuntimeException();
+        }
+        order.setPayed(true);
+        order = orderRepository.save(order);
+        log.info("Payed for order with id: {}", id);
+        return orderMappingService.mapOrderToOrderDto(order);
+    }
+
+    @Override
+    @Transactional
     public void deleteOrder(Long id) {
         log.info("Deleting order with id: {}", id);
         Order order = orderRepository.findById(id).orElseThrow(OrderItemNotFoundException::new);
+        order.getOrderItems().forEach(orderItem -> orderItemService.deleteOrderItem(orderItem.getId()));
         orderRepository.delete(order);
         log.info("Deleted order with id: {}", id);
+    }
+
+    @Override
+    @Transactional
+    @Scheduled(fixedRate = 600000) // 10 minutes (10 * 60 * 1000 milliseconds)
+    public void deleteUnpaidOrders() {
+        log.info("Deleting unpaid orders");
+        LocalDateTime tenMinutesAgo = LocalDateTime.now().minusMinutes(10);
+        List<Order> orders = orderRepository.findAll();
+        List<Order> paidOrders = orders.stream()
+                .filter(order -> !order.isPayed())
+                .filter(order -> Duration.between(order.getModificationTime(), tenMinutesAgo).toMinutes() > 10)
+                .toList();
+        paidOrders.forEach(order -> orderRepository.deleteById(order.getId()));
+        log.info("Deleted unpaid orders");
     }
 }

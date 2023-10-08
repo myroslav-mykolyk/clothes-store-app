@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Api(tags = "Good management API")
 @RequestMapping("/api/v1/goods")
 public interface GoodApi {
@@ -23,6 +25,11 @@ public interface GoodApi {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/{article}")
     GoodModel getGood(@PathVariable String article);
+
+    @ApiOperation("Get all goods")
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping
+    ResponseEntity<List<GoodDto>> getAllGoods();
 
     @ApiOperation("Create good")
     @ResponseStatus(HttpStatus.CREATED)

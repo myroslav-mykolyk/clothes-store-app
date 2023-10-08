@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -25,6 +27,14 @@ public class GoodServiceImpl implements GoodService {
         Good good = goodRepository.findByArticle(article).orElseThrow(GoodNotFoundException::new);
         log.info("Founded good with article: {}", article);
         return goodMappingService.mapGoodToGoodDto(good);
+    }
+
+    @Override
+    public List<GoodDto> getAllGoods() {
+        log.info("Getting all goods");
+        List<Good> goods = goodRepository.findAll();
+        log.info("Founded all goods");
+        return goods.stream().map(goodMappingService::mapGoodToGoodDto).toList();
     }
 
     @Override

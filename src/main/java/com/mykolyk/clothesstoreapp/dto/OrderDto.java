@@ -20,4 +20,6 @@ public class OrderDto {
     private LocalDateTime creationTime;
 
     private LocalDateTime modificationTime;
+
+    private boolean isPayed;
 }

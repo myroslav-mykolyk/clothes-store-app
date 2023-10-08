@@ -31,6 +31,7 @@ public class OrderMappingServiceImpl implements OrderMappingService {
                 .orderItemsIds(getOrderItemsIds(order.getOrderItems()))
                 .creationTime(order.getCreationTime())
                 .modificationTime(order.getModificationTime())
+                .isPayed(order.isPayed())
                 .build();
     }
 
@@ -44,9 +45,11 @@ public class OrderMappingServiceImpl implements OrderMappingService {
                 .orderItems(orderItemRepository.findAll())
                 .creationTime(orderDto.getCreationTime())
                 .modificationTime(orderDto.getModificationTime())
+                .isPayed(orderDto.isPayed())
                 .build();
     }
 
+    //TODO: Implement method
     @Override
     public Order populateOrderWithPresentOrderDtoFields(Order order, OrderDto orderDto) {
         return null;
