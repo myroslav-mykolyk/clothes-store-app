@@ -37,5 +37,6 @@ public class Order {
     @Column(name = "modification_time")
     private LocalDateTime modificationTime;
 
-    private boolean isPayed;
+    @Column(name = "is_paid")
+    private Boolean isPaid;
 }

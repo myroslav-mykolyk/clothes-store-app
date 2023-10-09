@@ -21,10 +21,10 @@ public class GoodDto {
     private String article;
 
     @NotNull(message = "'price' field should not be null", groups = OnCreate.class)
-    @Positive(message = "'price' field should be positive number", groups = OnUpdate.class)
-    private Double price;
+    @Positive(message = "'price' field should be positive number", groups = {OnCreate.class, OnUpdate.class})
+    private BigDecimal price;
 
     @NotNull(message = "'quantity' field should not be null", groups = OnCreate.class)
-    @PositiveOrZero(message = "'quantity' field should not be negative", groups = OnUpdate.class)
+    @PositiveOrZero(message = "'quantity' field should not be negative", groups = {OnCreate.class, OnUpdate.class})
     private Integer quantity;
 }

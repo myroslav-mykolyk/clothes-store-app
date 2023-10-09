@@ -49,6 +49,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderMappingService.mapOrderDtoToOrder(orderDto);
         order.setCreationTime(LocalDateTime.now());
         order.setModificationTime(LocalDateTime.now());
+        order.setIsPaid(false);
         order = orderRepository.save(order);
         log.info("Created order with id: {}", order.getId());
         return orderMappingService.mapOrderToOrderDto(order);
@@ -84,11 +85,11 @@ public class OrderServiceImpl implements OrderService {
     public OrderDto payFoOrder(Long id) {
         log.info("Paying for order with id: {}", id);
         Order order = orderRepository.findById(id).orElseThrow(OrderNotFoundException::new);
-        if(order.isPayed()) {
-            //TODO: Add related exception
+        if(order.getIsPaid()) {
+            //TODO: Add related exception!
             throw new RuntimeException();
         }
-        order.setPayed(true);
+        order.setIsPaid(true);
         order = orderRepository.save(order);
         log.info("Payed for order with id: {}", id);
         return orderMappingService.mapOrderToOrderDto(order);
@@ -111,11 +112,11 @@ public class OrderServiceImpl implements OrderService {
         log.info("Deleting unpaid orders");
         LocalDateTime tenMinutesAgo = LocalDateTime.now().minusMinutes(10);
         List<Order> orders = orderRepository.findAll();
-        List<Order> paidOrders = orders.stream()
-                .filter(order -> !order.isPayed())
-                .filter(order -> Duration.between(order.getModificationTime(), tenMinutesAgo).toMinutes() > 10)
+        List<Order> unpaidOrders = orders.stream()
+                .filter(order -> !order.getIsPaid())
+                .filter(order -> order.getModificationTime().isAfter(tenMinutesAgo))
                 .toList();
-        paidOrders.forEach(order -> orderRepository.deleteById(order.getId()));
+        orderRepository.deleteAll(unpaidOrders);
         log.info("Deleted unpaid orders");
     }
 }

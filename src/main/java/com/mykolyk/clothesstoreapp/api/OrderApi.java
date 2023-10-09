@@ -37,6 +37,15 @@ public interface OrderApi {
     @PatchMapping(value = "/{id}")
     OrderModel updateOrder(@PathVariable Long id,  @Validated(OnUpdate.class) @RequestBody OrderDto orderDto);
 
+
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", paramType = "path", required = true, value = "Order id"),
+    })
+    @ApiOperation("Pay for order")
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping(value = "/{id}/pay")
+    OrderModel payForOrder(@PathVariable Long id);
+
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", paramType = "path", required = true, value = "Order id"),
     })

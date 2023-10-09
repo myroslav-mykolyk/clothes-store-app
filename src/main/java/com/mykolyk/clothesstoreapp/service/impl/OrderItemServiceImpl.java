@@ -36,9 +36,9 @@ public class OrderItemServiceImpl implements OrderItemService {
     @Transactional
     public OrderItemDto createOrderItem(OrderItemDto orderItemDto) {
         log.info("Creating order item with id: {}", orderItemDto.getId());
-        if (orderItemRepository.existsById(orderItemDto.getId())) {
-            throw new OrderItemAlreadyExistException();
-        }
+//        if (orderItemRepository.existsById(orderItemDto.getId())) {
+//            throw new OrderItemAlreadyExistException();
+//        }
         decreaseQuantityOfGoods(orderItemDto);
         OrderItem orderItem = orderItemMappingService.mapOrderItemDtoToOrderItem(orderItemDto);
         orderItem = orderItemRepository.save(orderItem);

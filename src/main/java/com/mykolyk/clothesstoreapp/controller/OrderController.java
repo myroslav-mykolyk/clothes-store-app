@@ -34,6 +34,12 @@ public class OrderController implements OrderApi {
     }
 
     @Override
+    public OrderModel payForOrder(Long id) {
+        OrderDto orderDto = orderService.payFoOrder(id);
+        return orderAssembler.toModel(orderDto);
+    }
+
+    @Override
     public ResponseEntity<Void> deleteOrder(Long id) {
         orderService.deleteOrder(id);
         return ResponseEntity.noContent().build();

@@ -24,6 +24,10 @@ public class UserDto {
     @NotBlank(message = "'email' should not be empty", groups = OnCreate.class)
     private String email;
 
+    @Null(message = "'role' field should be absent in request", groups = OnUpdate.class)
+    @NotBlank(message = "'role' field should not be empty", groups = OnCreate.class)
+    private String role;
+
     @Null(message = "'password' field should be absent in request", groups = OnUpdate.class)
     @NotBlank(message = "'password' field should not be empty", groups = OnCreate.class)
     private String password;

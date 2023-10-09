@@ -23,6 +23,7 @@ public class GoodController implements GoodApi {
         return goodAssembler.toModel(outGoodDto);
     }
 
+    //TODO: Add HATEOAS links!
     @Override
     public ResponseEntity<List<GoodDto>> getAllGoods() {
         List<GoodDto> outGoodDtos = goodService.getAllGoods();

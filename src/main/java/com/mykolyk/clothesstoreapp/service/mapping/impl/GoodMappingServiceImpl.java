@@ -5,6 +5,7 @@ import com.mykolyk.clothesstoreapp.model.Good;
 import com.mykolyk.clothesstoreapp.service.mapping.GoodMappingService;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 @Service
@@ -34,6 +35,14 @@ public class GoodMappingServiceImpl implements GoodMappingService {
         String name = goodDto.getName();
         if (Objects.nonNull(name)) {
             good.setName(name);
+        }
+        BigDecimal price = goodDto.getPrice();
+        if(Objects.nonNull(price)) {
+            good.setPrice(price);
+        }
+        Integer quantity = goodDto.getQuantity();
+        if(Objects.nonNull(quantity)) {
+            good.setQuantity(quantity);
         }
         return good;
     }

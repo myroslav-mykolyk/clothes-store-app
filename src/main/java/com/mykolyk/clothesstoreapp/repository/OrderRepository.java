@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
-    @Query("SELECT o FROM Order o JOIN o.orderItems oi JOIN o.user u ORDER BY u.email ASC")
-    Optional<Order> findAllByUser(String email);
+    @Query("SELECT o FROM Order o JOIN o.orderItems oi JOIN o.user u WHERE u.email = :email")
+    Optional<Order> findAllByUserEmail(String email);
 }

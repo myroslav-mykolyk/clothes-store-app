@@ -17,6 +17,7 @@ public class UserMappingServiceImpl implements UserMappingService {
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .email(user.getEmail())
+                .role(user.getRole())
                 .build();
     }
 
@@ -26,6 +27,7 @@ public class UserMappingServiceImpl implements UserMappingService {
                 .firstName(userDto.getFirstName())
                 .lastName(userDto.getLastName())
                 .email(userDto.getEmail())
+                .role(userDto.getRole())
                 .password(extractPassword(userDto))
                 .build();
     }
