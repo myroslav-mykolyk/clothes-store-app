@@ -1,7 +1,7 @@
 package com.mykolyk.clothesstoreapp.service.impl;
 
 import com.mykolyk.clothesstoreapp.dto.UserDto;
-import com.mykolyk.clothesstoreapp.exception.UserAlreadyExistsException;
+import com.mykolyk.clothesstoreapp.exception.UserAlreadyExistException;
 import com.mykolyk.clothesstoreapp.exception.UserNotFoundException;
 import com.mykolyk.clothesstoreapp.model.User;
 import com.mykolyk.clothesstoreapp.repository.UserRepository;
@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
     public UserDto createUser(UserDto userDto) {
         log.info("Creating user with email: {}", userDto.getEmail());
         if (userRepository.existsByEmail(userDto.getEmail())) {
-            throw new UserAlreadyExistsException();
+            throw new UserAlreadyExistException();
         }
         User user = userMappingService.mapUserDtoToUser(userDto);
         user = userRepository.save(user);

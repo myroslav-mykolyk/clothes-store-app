@@ -2,10 +2,10 @@ package com.mykolyk.clothesstoreapp.exception;
 
 import com.mykolyk.clothesstoreapp.model.enums.ErrorType;
 
-public class UserAlreadyExistsException extends ServiceException {
+public class UserAlreadyExistException extends ServiceException {
     private static final String DEFAULT_MESSAGE = "User already exists!";
 
-    public UserAlreadyExistsException() {
+    public UserAlreadyExistException() {
         super(DEFAULT_MESSAGE);
     }
 

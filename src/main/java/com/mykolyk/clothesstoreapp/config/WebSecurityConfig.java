@@ -57,7 +57,7 @@ public class WebSecurityConfig {
                 .firstName("Admin")
                 .lastName("Admin")
                 .email("Admin@admin.com")
-                .role("ADMIN")
+                .role(ROLE_ADMIN)
                 .password("adminPassword")
                 .repeatPassword("adminPassword")
                 .build();

@@ -1,10 +1,11 @@
 package com.mykolyk.clothesstoreapp.service;
 
 import com.mykolyk.clothesstoreapp.dto.UserDto;
-import com.mykolyk.clothesstoreapp.exception.UserAlreadyExistsException;
+import com.mykolyk.clothesstoreapp.exception.UserAlreadyExistException;
 import com.mykolyk.clothesstoreapp.exception.UserNotFoundException;
 import com.mykolyk.clothesstoreapp.model.User;
 import com.mykolyk.clothesstoreapp.repository.UserRepository;
+import com.mykolyk.clothesstoreapp.service.mapping.GoodMappingService;
 import com.mykolyk.clothesstoreapp.service.mapping.impl.UserMappingServiceImpl;
 import com.mykolyk.clothesstoreapp.service.impl.UserServiceImpl;
 import com.mykolyk.clothesstoreapp.service.mapping.UserMappingService;
@@ -18,7 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static com.mykolyk.clothesstoreapp.test.util.TestDataUtil.TEST_EMAIL;
+import static com.mykolyk.clothesstoreapp.test.util.TestDataUtil.EMAIL;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
@@ -36,26 +37,27 @@ class UserServiceImplTest {
 
     @Spy
     private final UserMappingService userMappingService = new UserMappingServiceImpl();
+
     @Mock
     private UserRepository userRepository;
 
     @Test
     void getUserTest() {
-        User user = TestDataUtil.createUser();
-        when(userRepository.findByEmail(TEST_EMAIL)).thenReturn(Optional.of(user));
+        User testUser = TestDataUtil.createUser();
+        when(userRepository.findByEmail(EMAIL)).thenReturn(Optional.of(testUser));
 
-        UserDto userDto = userService.getUser(TEST_EMAIL);
+        UserDto userDto = userService.getUser(EMAIL);
 
         assertThat(userDto, allOf(
-                hasProperty("email", equalTo(user.getEmail())),
-                hasProperty("firstName", equalTo(user.getFirstName()))
+                hasProperty("email", equalTo(testUser.getEmail())),
+                hasProperty("firstName", equalTo(testUser.getFirstName()))
         ));
     }
 
     @Test
     void getUserUserNotFoundTest() {
-        when(userRepository.findByEmail(TEST_EMAIL)).thenReturn(Optional.empty());
-        assertThrows(UserNotFoundException.class, () -> userService.getUser(TEST_EMAIL));
+        when(userRepository.findByEmail(EMAIL)).thenReturn(Optional.empty());
+        assertThrows(UserNotFoundException.class, () -> userService.getUser(EMAIL));
     }
 
     @Test
@@ -76,9 +78,9 @@ class UserServiceImplTest {
     @Test
     public void createUserUserAlreadyExistsTest() {
         UserDto testUserDto = TestDataUtil.createUserDto();
-        when(userRepository.existsByEmail(TEST_EMAIL)).thenReturn(true);
+        when(userRepository.existsByEmail(EMAIL)).thenReturn(true);
 
-        assertThrows(UserAlreadyExistsException.class, () -> userService.createUser(testUserDto));
+        assertThrows(UserAlreadyExistException.class, () -> userService.createUser(testUserDto));
     }
 
     @Test
@@ -100,7 +102,7 @@ class UserServiceImplTest {
     @Test
     public void updateUserUserNotFoundTest() {
         UserDto testUserDto = TestDataUtil.createUserDto();
-        when(userRepository.findByEmail(TEST_EMAIL)).thenReturn(Optional.empty());
+        when(userRepository.findByEmail(EMAIL)).thenReturn(Optional.empty());
 
         assertThrows(UserNotFoundException.class,
                 () -> userService.updateUser(testUserDto.getEmail(), testUserDto));
@@ -109,7 +111,7 @@ class UserServiceImplTest {
     @Test
     void deleteUserTest() {
         User testUser = TestDataUtil.createUser();
-        when(userRepository.findByEmail(TEST_EMAIL)).thenReturn(Optional.of(testUser));
+        when(userRepository.findByEmail(EMAIL)).thenReturn(Optional.of(testUser));
 
         userService.deleteUser(testUser.getEmail());
 
@@ -118,7 +120,7 @@ class UserServiceImplTest {
 
     @Test
     void deleteUserUserNotFoundTest() {
-        when(userRepository.findByEmail(TEST_EMAIL)).thenReturn(Optional.empty());
-        assertThrows(UserNotFoundException.class, () -> userService.deleteUser(TEST_EMAIL));
+        when(userRepository.findByEmail(EMAIL)).thenReturn(Optional.empty());
+        assertThrows(UserNotFoundException.class, () -> userService.deleteUser(EMAIL));
     }
 }
